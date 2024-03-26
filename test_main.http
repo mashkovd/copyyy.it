@@ -1,0 +1,33 @@
+# Test your FastAPI endpoints
+
+POST http://127.0.0.1:8000/traders/
+Content-Type: application/json
+
+{
+  "email": "trader3@mail.com",
+  "is_active": true,
+  "api_key": "trader_api_key",
+  "api_secret": "trader_api_secret"
+}
+
+
+###
+
+POST http://127.0.0.1:8000/traders/1/followers/?trader_email=trader2@mail.com
+Content-Type: application/json
+
+{
+  "email": "trader2@mail.com",
+  "is_active": true,
+  "api_key": "trader_api_key",
+  "api_secret": "trader_api_secret"
+}
+
+###
+
+DELETE http://127.0.0.1:8000/traders/1
+Content-Type: application/json
+
+
+
+###

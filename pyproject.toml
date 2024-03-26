@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "copyyy-it"
+version = "0.1.0"
+description = ""
+authors = ["Dmitrii.Mashkov <dmitrii.mashkov@libertexgroup.com>"]
+readme = "README.md"
+packages = [{include = "copyyy"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.110.0"
+uvicorn = "^0.29.0"
+sqlalchemy = "^2.0.28"
+alembic = "^1.13.1"
+pydantic = "^2.6.4"
+email-validator = "^2.1.1"
+binance-connector = "^3.6.0"
+celery = {extras = ["redis"], version = "^5.3.6"}
+pydantic-settings = "^2.2.1"
+sqlmodel = "^0.0.16"
+
+
+[tool.poetry.group.dev.dependencies]
+deptry = "^0.14.2"
+ruff = "^0.3.4"
+black = "^24.3.0"
+isort = "^5.13.2"
+pre-commit = "^3.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
