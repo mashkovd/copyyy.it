@@ -69,8 +69,9 @@ def start_user_data_stream(trader: db.schemas.TraderDict, response: dict):
 
     with SessionMaker() as db:
         crud.set_ws_status_for_trader(db=db, trader_id=trader["id"], status=True)
+        logging.info(f"set ws status for {trader['email']} to True")
 
-    time.sleep(settings.TIME_FOR_RECREATE_WS)
+    time.sleep(settings.TIME_FOR_RECREATE_WS * 5)
     ws.user_data(
         response["listenKey"], action=SpotWebsocketStreamClient.ACTION_UNSUBSCRIBE
     )
@@ -88,10 +89,13 @@ def create_ws_for_trader(trader: models.Trader):
 @app.task
 def create_ws_for_traders():
     logging.info("Creating websocket for traders started")
+    l_traders = []
     with SessionMaker() as db:
         for trader in crud.get_traders_for_ws(db=db):
+            l_traders.append(trader.id)
             create_ws_for_trader(trader)
-    logging.info("Creating websocket for traders finished")
+    logging.info(f"Creating websocket for {len(l_traders)} traders finished")
+    return l_traders
 
 
 def create_order_message_handler(_, message):
@@ -104,8 +108,8 @@ def create_order_error_handler(message):
 
 
 @app.task
-def create_order(follower: db.schemas.FollowerDict, message: dict):
-    logging.info(f"create order for {follower['email']} started")
+def handle_event(follower: db.schemas.FollowerDict, message: dict):
+
     client = SpotWebsocketAPIClient(
         api_key=follower["api_key"],
         api_secret=follower["api_secret"],
@@ -115,6 +119,7 @@ def create_order(follower: db.schemas.FollowerDict, message: dict):
     message = OrderUpdate(**message)
 
     if message.X == "NEW":
+        logging.info(f"create order for {follower['email']} started")
         new_order = client.new_order(
             symbol=message.s,
             side=message.S,
@@ -131,5 +136,3 @@ with SessionMaker() as db:
     for trader in crud.get_traders(db=db):
         trader.ws_active = False
     db.commit()
-
-create_ws_for_traders.delay()

@@ -95,13 +95,13 @@ class MessageHandler:
 
 
 def handle_execution_report(trader, message):
-    from worker.app import create_order
+    from worker.app import handle_event
 
     with SessionMaker() as db:
         db_trader = crud.get_trader(db=db, trader_id=trader["id"])
         for follower in crud.get_followers_by_traders(db=db, db_trader=db_trader):
             if MessageFactory().create_message(message) is not None:
-                create_order.delay(
+                handle_event.delay(
                     follower.dict(), MessageFactory().create_message(message)
                 )
 

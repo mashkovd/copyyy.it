@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     REDIS_URL: str = "redis://redis:6379/0"
-    TIME_FOR_RECREATE_WS: int = 3600
+    TIME_FOR_RECREATE_WS: int = 25
     API_KEY: str = "api_key"
     API_SECRET: str = "api_secret"
 
