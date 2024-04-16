@@ -29,3 +29,10 @@ alembic-autogenerate:
 alembic-upgrade:
 	@echo "Upgrading database..."
 	alembic upgrade head
+
+.PHONY: format
+format:
+	$(call log, reorganizing imports & formatting code)
+	poetry run black .
+	poetry run isort .
+	poetry run ruff check . --fix --exit-zero

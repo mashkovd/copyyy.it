@@ -47,6 +47,14 @@ class FollowerCreate(TraderCreate):
     api_secret: str
 
 
+class FollowerDict(TraderBase):
+    email: int
+    is_active: bool
+    api_key: str
+    api_secret: str
+    trader_id: int
+
+
 class Follower(TraderBase):
     id: int
 

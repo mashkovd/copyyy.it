@@ -18,6 +18,7 @@ binance-connector = "^3.6.0"
 celery = {extras = ["redis"], version = "^5.3.6"}
 pydantic-settings = "^2.2.1"
 sqlmodel = "^0.0.16"
+flower = "^2.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,7 +26,15 @@ deptry = "^0.14.2"
 ruff = "^0.3.4"
 black = "^24.3.0"
 isort = "^5.13.2"
+pre-commit-hooks = "^4.6.0"
 pre-commit = "^3.7.0"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = ["E741", "E712"]
 
 [build-system]
 requires = ["poetry-core"]

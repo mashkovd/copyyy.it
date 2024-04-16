@@ -35,6 +35,25 @@ def get_traders(db: Session, skip: int = 0, limit: int = 100) -> list[models.Tra
     return db.query(models.Trader).offset(skip).limit(limit).all()
 
 
+def get_traders_for_ws(
+    db: Session, skip: int = 0, limit: int = 100
+) -> list[models.Trader]:
+    return (
+        db.query(models.Trader)
+        .filter(models.Trader.ws_active == False, models.Trader.is_active == True)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
+def set_ws_status_for_trader(db: Session, trader_id: int, status: bool = True):
+    db_trader = get_trader(db, trader_id=trader_id)
+    db_trader.ws_active = status
+    db.commit()
+    return db_trader
+
+
 def get_followers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Follower).offset(skip).limit(limit).all()
 

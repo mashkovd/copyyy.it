@@ -1,5 +1,7 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-slim
+ENV PATH="/root/.local/bin:$PATH"\
+    POETRY_VERSION="1.8.2"
 
 # Install system dependencies
 RUN apt-get update \
@@ -16,7 +18,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 
 # Install dependencies
-RUN poetry config virtualenvs.create false \
+RUN poetry config virtualenvs.create true \
     && poetry install --no-root --no-dev --no-interaction --no-ansi
 
 # Copy the rest of the application
